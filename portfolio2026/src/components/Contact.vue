@@ -1,6 +1,6 @@
 <template>
 
-<section id="contact" class="py-24 text-center">
+<section id="contact" class="py-24 text-center opacity-0 animate-fadeIn">
 
 <h2 class="text-4xl font-bold mb-6">
 Contact

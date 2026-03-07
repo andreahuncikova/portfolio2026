@@ -1,19 +1,91 @@
 <template>
-  <nav class="fixed top-0 w-full bg-slate-950/80 backdrop-blur z-50">
-    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+  <nav
+    v-if="showNav"
+    class="fixed left-10 top-1/2 -translate-y-1/2 z-50"
+  >
+    <ul class="relative space-y-8">
 
-      <h1 class="text-xl font-bold text-indigo-400">
-        Andrea.dev
-      </h1>
+      <!-- vertical line -->
+      <div class="absolute left-2 top-0 h-full w-[2px] bg-neutral-300"></div>
 
-      <ul class="flex gap-6 text-sm">
-        <li><a href="#projects" class="hover:text-indigo-400">Projects</a></li>
-        <li><a href="#skills" class="hover:text-indigo-400">Skills</a></li>
-        <li><a href="#about" class="hover:text-indigo-400">About</a></li>
-        <li><a href="#multimedia" class="hover:text-indigo-400">Design</a></li>
-        <li><a href="#contact" class="hover:text-indigo-400">Contact</a></li>
-      </ul>
+      <li v-for="section in sections" :key="section.id" class="relative flex items-center gap-4">
 
-    </div>
+        <!-- dot -->
+        <div
+          class="w-4 h-4 rounded-full border-2 transition-all"
+          :class="activeSection === section.id
+              ? 'bg-[#f3a0ad] border-[#f3a0ad] scale-125'
+            : 'bg-white border-neutral-400'"
+        ></div>
+
+        <!-- label -->
+        <a
+          :href="'#' + section.id"
+          class="text-sm transition"
+          :class="activeSection === section.id
+            ? 'text-[#f3a0ad] font-semibold'
+            : 'text-neutral-500 hover:text-black'"
+        >
+          {{ section.label }}
+        </a>
+
+      </li>
+
+    </ul>
   </nav>
 </template>
+
+
+<script>
+export default {
+  data() {
+    return {
+      activeSection: "",
+      showNav: false,
+
+      sections: [
+        { id: "about", label: "About" },
+        { id: "skills", label: "Skills" },
+        { id: "projects", label: "Projects" },
+        { id: "multimedia", label: "Design" },
+        { id: "contact", label: "Contact" }
+      ]
+    };
+  },
+
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+
+  methods: {
+    handleScroll() {
+
+      // show nav when reaching ABOUT section
+      const about = document.getElementById("about");
+
+      if (about) {
+        const aboutTop = about.offsetTop;
+        this.showNav = window.scrollY >= aboutTop - 200;
+      }
+
+      // detect active section
+      for (const section of this.sections) {
+        const el = document.getElementById(section.id);
+
+        if (el) {
+          const top = el.offsetTop - 200;
+          const bottom = top + el.offsetHeight;
+
+          if (window.scrollY >= top && window.scrollY < bottom) {
+            this.activeSection = section.id;
+          }
+        }
+      }
+    }
+  }
+};
+</script>

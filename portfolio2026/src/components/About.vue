@@ -1,7 +1,14 @@
 <template>
-  <section id="about" class="section container text-left">
+  <section id="about" class="section container text-left opacity-0 animate-fadeIn">
     <h2 class="text-3xl font-bold mb-6">About Me</h2>
 
+        <p class="text-slate-300 max-w-2xl mx-auto text-lg">
+      Web Development student at Business Academy South West in Esbjerg.
+      I build modern web applications with Vue and JavaScript while
+      combining technical development with strong UX and visual design
+      from my Multimedia Design background.
+    </p>
+    
     <p class="text-neutral-300 leading-relaxed max-w-2xl">
       I'm a developer passionate about building modern web applications
       and designing clean user experiences. I enjoy working with

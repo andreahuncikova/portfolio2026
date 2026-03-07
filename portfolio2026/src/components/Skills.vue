@@ -1,6 +1,6 @@
 <template>
 
-<section id="skills" class="py-24 px-6">
+<section id="skills" class="py-24 px-6 opacity-0 animate-fadeIn">
 
 <h2 class="text-4xl font-bold text-center mb-16">
 Skills

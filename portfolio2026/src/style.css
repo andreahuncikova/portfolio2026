@@ -9,7 +9,7 @@ html {
 
 /* Base styles */
 body {
-  @apply bg-neutral-950 text-white;
+  @apply text-black bg-[#fcfaf6];
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -28,4 +28,19 @@ body {
 /* Project card */
 .project-card {
   @apply bg-neutral-900 p-6 rounded-xl border border-neutral-800 hover:border-neutral-600 transition cursor-pointer;
+}
+
+#app {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color:#fcfaf6;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, button {
+  font-family: 'Space Grotesk', sans-serif;
 }

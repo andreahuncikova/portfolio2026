@@ -6,7 +6,7 @@ defineProps(["project"])
 
 <router-link :to="'/project/' + project.id">
 
-<div class="bg-slate-900 rounded-xl overflow-hidden hover:scale-105 transition cursor-pointer">
+<div class="bg-slate-900 rounded-xl overflow-hidden hover:scale-105 transition cursor-pointer fade-up">
 
 <img :src="project.image" class="w-full h-48 object-cover"/>
 
