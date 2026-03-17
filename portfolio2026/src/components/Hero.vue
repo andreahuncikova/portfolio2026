@@ -8,20 +8,24 @@
       </video>
     </div>
 
-    <!-- Hero content -->
-    <h1 class="text-5xl md:text-6xl font-bold text-white">
-      Hi, I'm <span class="text-indigo-400">Andrea</span>
-    </h1>
 
 
-    <!-- Buttons -->
-    <div class="flex gap-4 justify-center">
-      <a href="#projects" class="bg-indigo-500 px-6 py-3 rounded-lg hover:bg-indigo-600">
-        View Projects
-      </a>
-      <a href="#contact" class="border border-slate-600 px-6 py-3 rounded-lg hover:border-indigo-400">
-        Contact Me
-      </a>
+      <div class="flex gap-6 justify-center mb-40">
+
+    <a 
+    href="#about"
+    class="bg-[#f3a0ad] text-white px-8 py-3 font-semibold rotate-[-2deg] shadow-md hover:rotate-0 transition"
+    >
+    ABOUT ME
+    </a>
+
+    <a 
+    href="#projects"
+    class="bg-black text-white px-8 py-3 font-semibold rotate-[2deg] shadow-md hover:rotate-0 transition"
+    >
+    MY WORK
+    </a>
+
     </div>
 
   </section>

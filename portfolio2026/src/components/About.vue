@@ -1,41 +1,81 @@
 <template>
-  <section id="about" class="section container text-left opacity-0 animate-fadeIn">
-    <h2 class="text-3xl font-bold mb-6">About Me</h2>
+<section id="about" class="py-24 max-w-6xl mx-auto px-6">
 
-        <p class="text-slate-300 max-w-2xl mx-auto text-lg">
-      Web Development student at Business Academy South West in Esbjerg.
-      I build modern web applications with Vue and JavaScript while
-      combining technical development with strong UX and visual design
-      from my Multimedia Design background.
-    </p>
-    
-    <p class="text-neutral-300 leading-relaxed max-w-2xl">
-      I'm a developer passionate about building modern web applications
-      and designing clean user experiences. I enjoy working with
-      JavaScript, Vue, and modern frontend tools.
-    </p>
+<div class="grid md:grid-cols-2 gap-16 items-center">
 
-    <div class="grid md:grid-cols-3 gap-6 mt-10">
-      <div class="bg-neutral-900 p-6 rounded-xl border border-neutral-800">
-        <h3 class="font-semibold mb-2">Frontend</h3>
-        <p class="text-neutral-400 text-sm">
-          Vue, JavaScript, TailwindCSS
-        </p>
-      </div>
+<!-- LEFT SIDE -->
+<div>
 
-      <div class="bg-neutral-900 p-6 rounded-xl border border-neutral-800">
-        <h3 class="font-semibold mb-2">Backend</h3>
-        <p class="text-neutral-400 text-sm">
-          Node.js, APIs
-        </p>
-      </div>
+<h2 class="text-4xl font-bold mb-6">
+ABOUT ME
+</h2>
 
-      <div class="bg-neutral-900 p-6 rounded-xl border border-neutral-800">
-        <h3 class="font-semibold mb-2">Design</h3>
-        <p class="text-neutral-400 text-sm">
-          UI/UX, Figma
-        </p>
-      </div>
-    </div>
-  </section>
+<p class="text-neutral-700 mb-6 leading-relaxed">
+I'm a Web Development student at Business Academy South West in Esbjerg.
+My work focuses on building modern web applications while combining
+technical development with strong UX and visual design from my
+Multimedia Design background.
+</p>
+
+<p class="text-neutral-700 leading-relaxed">
+I enjoy creating interfaces that feel intuitive, visually balanced,
+and technically solid. My main tools are Vue, JavaScript and modern
+frontend frameworks.
+</p>
+
+<!-- skills -->
+<div class="flex flex-wrap gap-3 mt-8">
+
+<span class="px-3 py-1 bg-[#f3a0ad]/20 text-black rounded-full text-sm">
+Vue
+</span>
+
+<span class="px-3 py-1 bg-[#f3a0ad]/20 text-black rounded-full text-sm">
+JavaScript
+</span>
+
+<span class="px-3 py-1 bg-[#f3a0ad]/20 text-black rounded-full text-sm">
+Tailwind
+</span>
+
+<span class="px-3 py-1 bg-[#f3a0ad]/20 text-black rounded-full text-sm">
+UI/UX
+</span>
+
+<span class="px-3 py-1 bg-[#f3a0ad]/20 text-black rounded-full text-sm">
+Figma
+</span>
+
+</div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="relative">
+
+<div class="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm">
+
+<h3 class="text-xl font-semibold mb-4">
+Quick Facts
+</h3>
+
+<ul class="space-y-3 text-neutral-700">
+
+<li>📍 Based in Denmark</li>
+<li>🎓 Web Development student</li>
+<li>💡 Background in Multimedia Design</li>
+<li>🛠 Focus on modern frontend development</li>
+
+</ul>
+
+</div>
+
+<!-- accent decoration -->
+<div class="absolute -z-10 top-6 right-6 w-full h-full bg-[#f3a0ad]/20 rounded-2xl"></div>
+
+</div>
+
+</div>
+
+</section>
 </template>
