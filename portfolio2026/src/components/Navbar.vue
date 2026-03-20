@@ -6,7 +6,7 @@
     <ul class="relative space-y-8">
 
       <!-- vertical line -->
-      <div class="absolute left-2 top-0 h-full w-[2px] bg-neutral-300"></div>
+      <div class="absolute left-2 top-4 h-[calc(100%-1rem)] w-[2px] bg-neutral-300"></div>
 
       <li v-for="section in sections" :key="section.id" class="relative flex items-center gap-4">
 

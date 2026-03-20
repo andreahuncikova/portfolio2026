@@ -1,75 +1,134 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import Hero from "../components/Hero.vue"
-import About from "../components/About.vue"
-import Skills from "../components/Skills.vue"
-import Projects from "../components/Projects.vue"
-import Multimedia from "../components/Multimedia.vue"
-import Contact from "../components/Contact.vue"
 
-const sections = [
-  { id: "hero", component: Hero },
-  { id: "about", component: About },
-  { id: "skills", component: Skills },
-  { id: "projects", component: Projects },
-  { id: "multimedia", component: Multimedia },
-  { id: "contact", component: Contact },
-];
+import Navbar from "../components/Navbar.vue";
+import Hero from "../components/Hero.vue";
+import About from "../components/About.vue";
+import Skills from "../components/Skills.vue";
+import Projects from "../components/Projects.vue";
+import Multimedia from "../components/Multimedia.vue";
+import Contact from "../components/Contact.vue";
 
-const activeSection = ref(sections[0].id);
+const currentSlide = ref(0); // 0 = hero, 1 = about
+const isHorizontal = ref(true);
+const showNavbar = ref(false);
+const isAnimating = ref(false);
+const navbarTimeout = ref(null);
 
-const handleScroll = () => {
-  for (const sec of sections) {
-    const el = document.getElementById(sec.id);
-    if (!el) continue;
-    const rect = el.getBoundingClientRect();
-    const middle = window.innerHeight / 2;
+// scroll medzi hero → about
+const handleWheel = (e) => {
+  if (isAnimating.value) return;
 
-    if (rect.top < middle && rect.bottom > middle) {
-      activeSection.value = sec.id;
-      break;
+  if (isHorizontal.value) {
+    if (e.deltaY > 0) {
+      isAnimating.value = true;
+
+      // delay navbar
+      if (navbarTimeout.value) clearTimeout(navbarTimeout.value);
+      navbarTimeout.value = setTimeout(() => {
+        showNavbar.value = true;
+      }, 300);
+
+      currentSlide.value = 1;
+      isHorizontal.value = false;
+
+      setTimeout(() => {
+        isAnimating.value = false;
+      }, 700); // duration-700 match
+    }
+  } else {
+    if (window.scrollY === 0 && e.deltaY < 0) {
+      isAnimating.value = true;
+
+      currentSlide.value = 0;
+      isHorizontal.value = true;
+
+      if (navbarTimeout.value) clearTimeout(navbarTimeout.value);
+      navbarTimeout.value = setTimeout(() => {
+        showNavbar.value = false;
+      }, 300);
+
+      setTimeout(() => {
+        isAnimating.value = false;
+      }, 700);
     }
   }
 };
 
+// klik z buttonu na Hero
+const goToAbout = () => {
+  if (isAnimating.value) return;
+  isAnimating.value = true;
+
+  if (navbarTimeout.value) clearTimeout(navbarTimeout.value);
+  navbarTimeout.value = setTimeout(() => {
+    showNavbar.value = true;
+  }, 300);
+
+  currentSlide.value = 1;
+  isHorizontal.value = false;
+
+  setTimeout(() => {
+    isAnimating.value = false;
+  }, 700);
+};
+
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-  handleScroll();
+  window.addEventListener("wheel", handleWheel);
 });
 </script>
 
 <template>
-  <div class="relative">
-    <section
-      v-for="sec in sections"
-      :key="sec.id"
-      :id="sec.id"
-      class="w-full min-h-screen flex items-center justify-center overflow-hidden"
+  <div class="relative overflow-x-hidden">
+
+  <div class="fixed top-1/2 left-0 w-full z-50 flex justify-center -translate-y-1/2">
+  <div class="w-full max-w-6xl px-6">
+    <Navbar
+      v-show="showNavbar"
+      class="w-full transition-all duration-500 h-16 flex items-center"
+      :class="showNavbar
+        ? 'opacity-100 translate-y-0'
+        : 'opacity-0 -translate-y-10'"
+    />
+  </div>
+</div>
+
+    <!-- 🔥 HERO + ABOUT (HORIZONTAL) -->
+    <div
+      class="flex w-[200vw] h-screen transition-transform duration-700 ease-in-out"
+      :style="{ transform: `translateX(-${currentSlide * 100}vw)` }"
     >
-      <div
-        class="transition-all duration-700 ease-in-out"
-        :class="{
-          'opacity-100 translate-y-0': activeSection === sec.id,
-          'opacity-0 translate-y-12': activeSection !== sec.id
-        }"
-      >
-        <component :is="sec.component" />
-      </div>
+      <!-- HERO -->
+      <section class="w-screen h-screen flex items-center justify-center">
+        <Hero 
+          :active="currentSlide === 0"
+          @goAbout="goToAbout"
+        />
+      </section>
+
+      <!-- ABOUT -->
+      <section class="w-screen h-screen flex items-center justify-center">
+        <About :active="currentSlide === 1" />
+      </section>
+    </div>
+
+
+    <!-- 🔽 NORMAL SCROLL -->
+    <section class="min-h-screen flex items-center justify-center">
+      <Skills />
     </section>
+
+    <section class="min-h-screen flex items-center justify-center">
+      <Projects />
+    </section>
+
+    <section class="min-h-screen flex items-center justify-center">
+      <Multimedia />
+    </section>
+
+    <section class="min-h-screen flex items-center justify-center">
+      <Contact />
+    </section>
+
   </div>
 </template>
-
-<style scoped>
-.opacity-0 {
-  opacity: 0;
-}
-.opacity-100 {
-  opacity: 1;
-}
-.translate-y-0 {
-  transform: translateY(0);
-}
-.translate-y-12 {
-  transform: translateY(3rem);
-}
-</style>
