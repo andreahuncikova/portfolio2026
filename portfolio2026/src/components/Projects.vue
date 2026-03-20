@@ -6,8 +6,8 @@ import { projects } from "../data/projects"
 
 <section id="projects" class="py-24 px-6">
 
-<h2 class="text-4xl font-bold text-center mb-16">
-Projects
+<h2 class="text-4xl font-bold text-center mb-16 text-[#f3a0ad]">
+PROJECTS
 </h2>
 
 <div class="max-w-4xl mx-auto space-y-6">

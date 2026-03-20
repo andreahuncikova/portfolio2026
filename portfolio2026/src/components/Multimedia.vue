@@ -4,8 +4,8 @@ import { multimediaProjects } from "../data/multimediaProjects.js";
 
 <template>
 <section id="multimedia" class="py-24 px-6 opacity-0 animate-fadeIn">
-  <h2 class="text-4xl font-bold text-center mb-12">
-    Multimedia Design Work
+  <h2 class="text-4xl font-bold text-center mb-12 text-[#f3a0ad]">
+    MULTIMEDIA PROJECTS
   </h2>
 
   <!-- Asymetrická galéria -->

@@ -6,7 +6,7 @@
 <!-- LEFT SIDE -->
 <div>
 
-<h2 class="text-4xl font-bold mb-6">
+<h2 class="text-4xl font-bold mb-6 text-[#f3a0ad]">
 ABOUT ME
 </h2>
 
@@ -55,7 +55,7 @@ Figma
 
 <div class="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm">
 
-<h3 class="text-xl font-semibold mb-4">
+<h3 class="text-xl font-semibold mb-4 text-[#f3a0ad]">
 Quick Facts
 </h3>
 

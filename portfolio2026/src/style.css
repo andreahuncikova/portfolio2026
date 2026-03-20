@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +14,7 @@ body {
   @apply text-black bg-[#fcfaf6];
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
   cursor: none;
 }
 
@@ -38,29 +40,33 @@ body {
   background-color:#fcfaf6;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-}
 
-h1, h2, h3, button {
-  font-family: 'Space Grotesk', sans-serif;
+
+h1, h2, h3, button, a {
+  font-weight: 500;
+  font-family: 'Schoolbell', cursive;
 }
 
 
 .cursor {
   position: fixed;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #f3a0ad;
   pointer-events: none;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
   transform: translate(-50%, -50%);
-  transition: transform 0.15s ease;
   z-index: 9999;
+  background: url('/cursor1.svg') no-repeat center center;
+  background-size: contain;
+  transition: background 0.05s, transform 0.1s ease;
 }
 
+/* Hover verzia */
 .cursor.hover {
-  transform: translate(-50%, -50%) scale(2);
+  background: url('/cursor2.svg') no-repeat center center;
+  background-size: contain;
+  transform: translate(-50%, -50%) scale(1.5);
 }
 
 a, button {

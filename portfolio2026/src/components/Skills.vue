@@ -8,8 +8,8 @@ const open = ref(false)
 
 <section id="skills" class="py-24 px-6 text-center">
 
-<h2 class="text-4xl font-bold mb-16">
-Skills
+<h2 class="text-4xl font-bold mb-16 text-[#f3a0ad]">
+SKILLS
 </h2>
 
 <!-- MAIN FOLDER -->

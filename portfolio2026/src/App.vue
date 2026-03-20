@@ -17,21 +17,30 @@ export default {
   mounted() {
     const cursor = document.querySelector(".cursor");
 
-  window.addEventListener("mousemove", (e) => {
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
-  });
-
-  const hoverElements = document.querySelectorAll("a, button");
-
-  hoverElements.forEach((el) => {
-    el.addEventListener("mouseenter", () => {
-      cursor.classList.add("hover");
+    // Sleduj pohyb myši
+    window.addEventListener("mousemove", (e) => {
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
     });
 
-    el.addEventListener("mouseleave", () => {
-      cursor.classList.remove("hover");
+    // Dynamické hover over elementy
+    document.addEventListener("mouseover", (e) => {
+      const el = e.target;
+      if (
+        el.matches("a, button, .project-card") // pridaj všetky interaktívne triedy
+      ) {
+        cursor.classList.add("hover");
+      }
     });
-  });
-  } }
+
+    document.addEventListener("mouseout", (e) => {
+      const el = e.target;
+      if (
+        el.matches("a, button, .project-card")
+      ) {
+        cursor.classList.remove("hover");
+      }
+    });
+  }
+};
 </script>

@@ -44,11 +44,11 @@ export default {
       showNav: false,
 
       sections: [
-        { id: "about", label: "About" },
-        { id: "skills", label: "Skills" },
-        { id: "projects", label: "Projects" },
-        { id: "multimedia", label: "Design" },
-        { id: "contact", label: "Contact" }
+        { id: "about", label: "ABOUT" },
+        { id: "skills", label: "SKILLS" },
+        { id: "projects", label: "PROJECTS" },
+        { id: "multimedia", label: "MULTIMEDIA" },
+        { id: "contact", label: "CONTACT" }
       ]
     };
   },
