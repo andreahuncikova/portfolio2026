@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barrio&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barrio&family=Figtree:wght@400;500;700&family=Jost:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Caveat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 
 @tailwind base;
@@ -8,15 +8,22 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 /* Base styles */
 body {
-  @apply text-black bg-[#fcfaf6];
+  @apply text-black bg-[#f7f3ee];
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  cursor: none;
+  overflow-x: clip;
+}
+
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
 }
 
 /* Container */
@@ -38,16 +45,501 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color:#fcfaf6;
+  background-color:#f7f3ee;
+}
+
+.hero-filmstrip {
+  transform-origin: center;
+  animation: hero-film-drift 8s ease-in-out infinite alternate;
+}
+
+@keyframes hero-film-drift {
+  0% { transform: translate3d(-0.7%, 0.2%, 0) rotate(-0.35deg) scale(1.01); }
+  100% { transform: translate3d(0.7%, -0.2%, 0) rotate(0.35deg) scale(1.03); }
 }
 
 
+.about-section {
+  overflow: visible;
+}
 
-h1, h2, h3, button, a {
+.about-copy {
+  position: relative;
+}
+
+.about-text-block {
+  position: relative;
+  max-width: 34rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid rgba(196, 81, 99, 0.55);
+  background: rgba(255, 255, 255, 0.32);
+  transition: transform 500ms ease, background-color 500ms ease;
+}
+
+.about-text-block:hover {
+  transform: translateX(0.35rem);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.about-text-block-secondary {
+  margin-top: 1rem;
+  margin-left: 2rem;
+  border-left-color: rgba(196, 81, 99, 0.25);
+}
+
+.about-block-label {
+  display: block;
+  margin-bottom: 0.65rem;
+  color: rgba(196, 81, 99, 0.85);
+  font: 600 0.65rem/1 Inter, sans-serif;
+  letter-spacing: 0.16em;
+}
+
+.about-toolkit {
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(196, 81, 99, 0.22);
+}
+
+.about-board {
+  position: relative;
+  max-width: 72rem;
+  width: calc(100% - clamp(5rem, 10vw, 8rem));
+  min-height: 32rem;
+  margin: 1rem 0 0 clamp(4rem, 7vw, 6rem);
+  padding: 2.75rem clamp(2rem, 5vw, 5rem) 3.25rem;
+  overflow: visible;
+  background: transparent;
+  transform: translateY(0.75rem);
+}
+
+.about-board-hardware {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* závesy: kovový krúžok zavesený na ráme mriežky a čierna šnúra hore k háčiku */
+.board-hanger {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.board-hanger-left { left: 22%; }
+.board-hanger-right { left: 78%; }
+
+.board-ring {
+  position: absolute;
+  top: -0.62rem;
+  left: -0.42rem;
+  z-index: 2;
+  width: 0.84rem;
+  height: 0.84rem;
+  border: 0.15rem solid #a7adb1;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0.05rem 0 rgba(255, 255, 255, 0.55),
+    0 0.08rem 0.12rem rgba(30, 20, 10, 0.45);
+}
+
+/* skrútená čierna šnúra, mierne naklonená k háčiku nad nástenkou */
+.board-cord {
+  position: absolute;
+  bottom: 0.45rem;
+  left: -0.14rem;
+  z-index: 1;
+  width: 0.28rem;
+  height: 14rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(255, 255, 255, 0.18) 45%, rgba(0, 0, 0, 0.18)),
+    repeating-linear-gradient(155deg, #3a3d3a 0 0.14rem, #161816 0.14rem 0.24rem),
+    #222422;
+  box-shadow: 0.2rem 0.3rem 0.3rem rgba(30, 20, 10, 0.22);
+  transform-origin: 50% 100%;
+}
+
+.board-hanger-left .board-cord { transform: rotate(14deg); }
+.board-hanger-right .board-cord { transform: rotate(-14deg); }
+
+.about-board-heading {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+}
+
+.about-board-kicker,
+.about-board-stamp {
+  color: #526d4b;
+  font: 600 0.65rem/1.2 Inter, sans-serif;
+  letter-spacing: 0.14em;
+}
+
+.about-board-heading h2 {
+  margin: 0;
+  color: #c45163;
+  font-size: clamp(2.3rem, 5vw, 4.5rem);
+  line-height: 0.9;
+}
+
+.about-board-stamp {
+  padding: 0.45rem;
+  border: 1px solid rgba(196, 81, 99, 0.5);
+  color: #c45163;
+  line-height: 1.1;
+  text-align: center;
+  transform: rotate(7deg);
+}
+
+.about-board-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.about-note,
+.about-facts-card {
+  position: relative;
+  padding: 1.5rem;
+  background: #fffdf8;
+  box-shadow: 0.4rem 0.5rem 0 rgba(82, 109, 75, 0.13);
+  transition: transform 450ms ease, box-shadow 450ms ease;
+}
+
+.about-note,
+.about-facts-card,
+.about-design-board {
+  opacity: 0;
+}
+
+.about-board-active .about-note,
+.about-board-active .about-facts-card,
+.about-board-active .about-design-board {
+  opacity: 1;
+}
+
+.about-board-active .about-note-profile {
+  animation: about-pin-note 700ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-board-active .about-note-learning {
+  animation: about-pin-note 700ms 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-board-active .about-note-toolkit {
+  animation: about-pin-note 700ms 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-board-active .about-design-board {
+  animation: about-pin-note 700ms 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-board-active .about-facts-card {
+  animation: about-pin-note 700ms 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes about-pin-note {
+  from { opacity: 0; transform: translateY(-2rem) rotate(-4deg) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) rotate(var(--note-rotation, 0deg)) scale(1); }
+}
+
+.about-clip {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  z-index: 4;
+  width: 3.1rem;
+  height: 1.15rem;
+  border-radius: 0.2rem 0.2rem 0.45rem 0.45rem;
+  border: 1px solid rgba(63, 68, 63, 0.45);
+  background: linear-gradient(#c3c9c1, #8d958c 58%, #606860);
+  box-shadow: 0 0.25rem 0.25rem rgba(31, 28, 28, 0.22);
+  transform: translateX(-50%);
+}
+
+.about-clip::before,
+.about-clip::after {
+  position: absolute;
+  top: -1.25rem;
+  width: 1.35rem;
+  height: 1.7rem;
+  content: "";
+  border: 3px solid #747c74;
+  border-top: 0;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0.05rem 0.08rem 0.1rem rgba(31, 28, 28, 0.18);
+}
+
+.about-clip::before {
+  left: 0.1rem;
+  transform: rotate(-23deg);
+}
+
+.about-clip::after {
+  right: 0.1rem;
+  transform: rotate(23deg);
+}
+
+.about-clip-green {
+  background: linear-gradient(#687d5d, #31442e 58%, #1d281b);
+}
+
+.about-pushpin {
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  z-index: 4;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid rgba(31, 28, 28, 0.16);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 25%, #f5f7f4 0 10%, #aab2a9 45%, #6f796f 100%);
+  box-shadow: 0 0.3rem 0.25rem rgba(31, 28, 28, 0.24);
+  transform: translateX(-50%);
+}
+
+.about-pushpin::after {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.4rem;
+  width: 0.3rem;
+  height: 0.7rem;
+  content: "";
+  background: #6d736b;
+  clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
+}
+
+.about-paperclip {
+  position: absolute;
+  top: -1.4rem;
+  right: 1.5rem;
+  z-index: 4;
+  width: 1.4rem;
+  height: 2.5rem;
+  border: 3px solid #8a9389;
+  border-top: 0;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0.08rem 0.08rem 0.1rem rgba(31, 28, 28, 0.2);
+  transform: rotate(14deg);
+}
+
+.about-paperclip::after {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.2rem;
+  width: 0.7rem;
+  height: 1.7rem;
+  content: "";
+  border: 2px solid #b3bbb2;
+  border-top: 0;
+  border-radius: 0 0 0.7rem 0.7rem;
+}
+
+.about-note:hover,
+.about-facts-card:hover,
+.about-design-board:hover {
+  box-shadow: 0.65rem 0.75rem 0 rgba(196, 81, 99, 0.16);
+  transform: translateY(-0.3rem) rotate(0deg);
+}
+
+.about-note p {
+  margin: 0;
+  color: #3d3a35;
+  font: 400 0.95rem/1.65 Inter, sans-serif;
+}
+
+.about-note p span {
+  color: #c45163;
+  font-weight: 700;
+}
+
+.about-note-profile {
+  grid-column: 1 / 7;
+  --note-rotation: -2deg;
+  transform: rotate(-2deg);
+}
+
+.about-note-learning {
+  grid-column: 7 / 13;
+  margin-top: 1.5rem;
+  background: #dbe3cd;
+  --note-rotation: 1.5deg;
+  transform: rotate(1.5deg);
+}
+
+.about-note-toolkit {
+  grid-column: 1 / 5;
+  margin-top: 1.2rem;
+  background: #f2b1b8;
+  --note-rotation: 1.5deg;
+  transform: rotate(1.5deg);
+}
+
+.about-block-label {
+  margin-bottom: 0.75rem;
+  color: #526d4b;
+  font-size: 0.62rem;
+}
+
+.about-tool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.about-tool-list span {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(82, 109, 75, 0.35);
+  color: #3d3a35;
+  font: 600 0.7rem/1 Inter, sans-serif;
+}
+
+.about-pin {
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #c45163;
+  box-shadow: 0 0 0 0.2rem rgba(196, 81, 99, 0.18);
+  transform: translateX(-50%);
+}
+
+.about-pin-green {
+  background: #526d4b;
+  box-shadow: 0 0 0 0.2rem rgba(82, 109, 75, 0.18);
+}
+
+.about-facts-card {
+  grid-column: 9 / 13;
+  grid-row: 2 / span 2;
+  margin-top: 1rem;
+  border-top: 0.45rem solid #526d4b;
+  --note-rotation: -1.5deg;
+  transform: rotate(-1.5deg);
+}
+
+.about-facts-card h3 {
+  margin: 0 0 1.25rem;
+  color: #c45163;
+  font-size: 1.35rem;
+}
+
+.about-facts-card ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-facts-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: #3d3a35;
+  font: 400 0.85rem/1.35 Inter, sans-serif;
+}
+
+.about-facts-card svg {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #526d4b;
+}
+
+.about-design-board {
+  grid-column: 5 / 9;
+  grid-row: 2;
+  position: relative;
+  top: auto;
+  right: auto;
+  width: auto;
+  height: 15rem;
+  margin-top: 2rem;
+  border: 1px solid rgba(196, 81, 99, 0.3);
+  background: #fffdf8;
+  transform: rotate(-3deg);
+}
+
+.about-board-inner-tape {
+  position: absolute;
+  top: -0.55rem;
+  left: 50%;
+  width: 4.5rem;
+  height: 1.25rem;
+  background: url('/tape.png') center / 100% 100% no-repeat;
+  opacity: 0.86;
+  transform: translateX(-50%) rotate(4deg);
+}
+
+.about-design-board .about-code-mark {
+  top: 1.6rem;
+  left: 1.2rem;
+  font-size: 2.5rem;
+}
+
+.about-design-board .about-board-label {
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.5rem;
+}
+
+.about-design-board .about-ui-window {
+  right: 1rem;
+  bottom: 1.6rem;
+  width: 8rem;
+  height: 6rem;
+  padding: 0.75rem;
+}
+
+.about-design-board .about-swatch {
+  bottom: 0.7rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.about-design-board .about-swatch-pink { left: 1rem; }
+.about-design-board .about-swatch-green { left: 2.1rem; }
+.about-design-board .about-swatch-cream { left: 3.2rem; }
+
+
+
+
+/* fonty: Caveat = písané rukou, Inter = text na čítanie, JetBrains Mono = kód a malé štítky.
+   Barrio ostáva len pre nadpisy na stránke detailu projektu. */
+:root {
+  --font-hand: 'Caveat', cursive;
+  --font-text: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Barrio', cursive;
+}
+
+.project-page h1,
+.project-page h2,
+.project-page h3,
+.fontpekny {
   font-weight: 500;
-  font-family: 'Barrio', cursive;
+  font-family: var(--font-display);
 }
 
+p {
+  font-weight: 400;
+  font-family: var(--font-text);
+}
 
 .cursor {
   position: fixed;
@@ -56,7 +548,7 @@ h1, h2, h3, button, a {
   top: 0;
   width: 32px;
   height: 32px;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -30%);
   z-index: 9999;
   background: url('/cursor1.svg') no-repeat center center;
   background-size: contain;
@@ -67,9 +559,895 @@ h1, h2, h3, button, a {
 .cursor.hover {
   background: url('/cursor2.svg') no-repeat center center;
   background-size: contain;
-  transform: translate(-50%, -50%) scale(1.5);
+  transform: translate(-50%, -30%) scale(1.5);
 }
 
-a, button {
-  cursor: none;
+@media (pointer: fine) {
+  a, button, [class*="cursor-pointer"] {
+    cursor: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-board {
+    width: calc(100% - 1rem);
+    min-height: auto;
+    margin: 1.5rem 0 0 0.5rem;
+    padding: 2.5rem 1rem 2.75rem;
+    transform: translateY(0.5rem);
+  }
+
+  .about-board-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .about-board-stamp {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .about-board-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .about-note,
+  .about-facts-card,
+  .about-design-board {
+    width: 100%;
+    margin: 0;
+    transform: none;
+  }
+
+  .about-design-board {
+    order: 3;
+    height: 13rem;
+  }
+
+  .about-note-toolkit {
+    order: 4;
+  }
+
+  .about-facts-card {
+    order: 5;
+  }
+}
+
+/* drôtená mriežka About na celú šírku svojho miesta na stene */
+.about-rebuilt-board {
+  width: 100%;
+  max-width: none;
+  min-height: 34rem;
+  margin: 0;
+  padding: 2.5rem clamp(1.5rem, 4vw, 3.5rem) 3rem;
+  background: transparent;
+  transform: none;
+}
+
+/* spoločné premenné pre všetky papiere na nástenke */
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .35 0 0 0 0 .35 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --ink: #3d3a35;
+  --ink-pink: #c45163;
+}
+
+.about-rebuilt-heading {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  grid-column: 1 / -1;
+  margin: 0 0 0.5rem;
+}
+
+.about-rebuilt-heading h2 {
+  margin: 0;
+  color: #c45163;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.9;
+}
+
+/* útržok papiera s nadpisom */
+.about-title-scrap {
+  position: relative;
+  display: inline-block;
+}
+
+.about-title-paper {
+  padding: 1.6rem 2.4rem 1.2rem 2rem;
+  background-color: #ffffff;
+  background-image:
+    var(--paper-grain),
+    linear-gradient(170deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.045) 100%);
+  clip-path: polygon(
+    0 4%, 6% 0, 14% 3%, 22% 0, 31% 2%, 40% 0, 49% 3%, 58% 1%, 67% 3%, 76% 0, 85% 2%, 93% 0, 100% 3%,
+    98% 22%, 100% 41%, 97% 60%, 100% 80%, 98% 100%,
+    90% 97%, 81% 100%, 72% 96%, 63% 99%, 54% 96%, 45% 100%, 36% 97%, 27% 100%, 18% 96%, 9% 99%, 1% 97%,
+    2% 76%, 0 55%, 2% 33%
+  );
+}
+
+.about-title-scrap .board-clip {
+  left: 1.2rem;
+  transform: rotate(-8deg);
+}
+
+/* ---------- koláž ---------- */
+.collage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr 1fr;
+  gap: 3rem clamp(2.6rem, 4vw, 5rem);
+  align-items: start;
+  max-width: 82rem;
+  margin: 0 auto;
+}
+
+.collage-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.collage-col-b { padding-top: 2.6rem; }
+.collage-col-c { padding-top: 0.6rem; }
+
+/* menší útržok pod zošitom, posunutý do strany */
+.bi-route { align-self: flex-end; margin-top: 3rem; margin-right: 2rem; }
+
+/* každý kus papiera: vonkajší obal = tieň + rotácia, vnútro = tvar papiera */
+.bi {
+  position: relative;
+  opacity: 0;
+  filter:
+    drop-shadow(0 1px 1px rgba(45, 35, 25, 0.16))
+    drop-shadow(0 8px 9px rgba(45, 35, 25, 0.16));
+  transform: rotate(var(--note-rotation, 0deg));
+  transform-origin: 50% 0.9rem;
+  transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1), filter 400ms ease;
+}
+
+/* polaroidy visia na stene od začiatku – bez animácie pripnutia (mimo aktuálnej zastávky
+   sú animácie pozastavené, takže by ostali neviditeľné, kým k nim kamera nepríde) */
+.bi.polaroid.is-pinned {
+  opacity: 1;
+  animation: none;
+}
+
+/* papier sa pripne, keď ho v-pin pri scrollovaní uvidí */
+.bi.is-pinned {
+  opacity: 1;
+  animation: rebuilt-note-in 750ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+.bi:hover {
+  z-index: 3;
+  filter:
+    drop-shadow(0 2px 2px rgba(45, 35, 25, 0.14))
+    drop-shadow(0 16px 14px rgba(45, 35, 25, 0.2));
+  transform: translateY(-3px) rotate(calc(var(--note-rotation, 0deg) * -0.5));
+}
+
+.bi-paper {
+  position: relative;
+  padding: 1.3rem 1.4rem;
+  background-color: #ffffff;
+  background-image:
+    var(--paper-grain),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 40%, rgba(0, 0, 0, 0.045) 100%);
+}
+
+.bi-joined { margin-top: -1.7rem; }
+.bi-quote.bi-joined { margin-left: -1.2rem; margin-right: 0.6rem; }
+.bi-joined .bi-clip-join { left: 55%; }
+
+/* natrhnuté okraje */
+.torn-top {
+  clip-path: polygon(
+    0 1.2%, 4% 0, 9% 1%, 15% 0.2%, 21% 1.3%, 27% 0, 34% 1%, 41% 0.3%, 48% 1.4%, 55% 0, 62% 1.1%,
+    69% 0.2%, 76% 1.3%, 83% 0, 90% 1%, 96% 0.2%, 100% 1%, 100% 100%, 0 100%
+  );
+}
+
+.torn-all {
+  clip-path: polygon(
+    0 6%, 7% 0, 15% 4%, 24% 1%, 33% 5%, 42% 0, 52% 4%, 61% 1%, 70% 5%, 79% 0, 88% 4%, 95% 1%, 100% 7%,
+    98% 30%, 100% 52%, 97% 74%, 100% 95%,
+    92% 100%, 83% 95%, 74% 99%, 64% 95%, 55% 100%, 45% 96%, 36% 100%, 26% 95%, 17% 99%, 8% 96%, 1% 100%,
+    3% 78%, 0 55%, 2% 30%
+  );
+}
+
+/* ručné písmo */
+.hand,
+.hand-title,
+.hand-label {
+  font-family: 'Caveat', cursive;
+  color: var(--ink);
+}
+
+.hand {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.hand-title {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 1.75rem;
+  color: var(--ink-pink);
+  font-size: 2.3rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+
+.hand-label {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  color: var(--ink-pink);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-decoration: underline wavy rgba(196, 81, 99, 0.5) 1px;
+  text-underline-offset: 0.3rem;
+}
+
+.hand-big { font-size: 1.65rem; line-height: 1.6rem; font-weight: 700; }
+.hand-small { margin-top: 0.6rem; font-size: 1.2rem; line-height: 1.3rem; opacity: 0.85; }
+.hand-heart { color: var(--ink-pink); }
+
+/* čmáranice */
+.doodle-underline {
+  position: absolute;
+  left: -0.2rem;
+  bottom: -0.65rem;
+  width: 110%;
+  height: 0.7rem;
+  overflow: visible;
+}
+
+.doodle-underline path,
+.doodle-circled path,
+.doodle-route path {
+  fill: none;
+  stroke: var(--ink-pink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.doodle-circled {
+  position: relative;
+  white-space: nowrap;
+}
+
+.doodle-circled svg {
+  position: absolute;
+  top: -0.35rem;
+  left: -0.6rem;
+  width: calc(100% + 1.2rem);
+  height: calc(100% + 0.7rem);
+  overflow: visible;
+}
+
+/* zošit – linajky + okraj */
+.paper-notebook {
+  padding: 2.1rem 1.6rem 1.75rem 3.2rem;
+  background-image:
+    var(--paper-grain),
+    linear-gradient(90deg, transparent 2.4rem, rgba(196, 81, 99, 0.45) 2.4rem, rgba(196, 81, 99, 0.45) calc(2.4rem + 1px), transparent calc(2.4rem + 1px)),
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(1.75rem - 1px), rgba(82, 109, 75, 0.2) calc(1.75rem - 1px), rgba(82, 109, 75, 0.2) 1.75rem);
+  background-position: 0 0, 0 0, 0 0.55rem;
+}
+
+.paper-notebook .hand + .hand { margin-top: 1.75rem; }
+
+/* lepiaci papierik – šalviová zelená */
+.paper-sticky {
+  min-height: 12rem;
+  padding: 1.6rem 1.3rem 1.3rem;
+  background-color: #dbe3cd;
+  background-image:
+    var(--paper-grain),
+    linear-gradient(180deg, rgba(50, 70, 40, 0.08) 0, rgba(50, 70, 40, 0) 1.4rem, rgba(255, 255, 255, 0.18) 55%, rgba(50, 70, 40, 0.07) 100%);
+}
+
+.paper-sticky .hand { color: #2f3f2b; }
+
+/* citát – svetloružový útržok */
+.paper-quote {
+  padding: 1.8rem 1.6rem 1.6rem;
+  background-color: #f2b1b8;
+}
+
+.paper-quote .hand { color: #5a2430; font-size: 1.55rem; font-weight: 600; line-height: 1.8rem; }
+
+/* "hľadám prácu" – výrazný ružový útržok */
+.paper-hiring {
+  padding: 1.5rem 1.4rem 1.3rem 3.4rem;
+  background-color: #c45163;
+}
+
+.paper-hiring .hand { color: #fffdf8; }
+.paper-hiring .hand-small { opacity: 0.9; }
+
+.doodle-star {
+  position: absolute;
+  top: 1.35rem;
+  left: 1rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  transform: rotate(-12deg);
+}
+
+.doodle-star path {
+  fill: none;
+  stroke: #fffdf8;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+/* SK → CPH útržok */
+.paper-route {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 1.3rem 0.8rem;
+}
+
+.paper-route .hand { color: #526d4b; font-size: 1.6rem; font-weight: 700; }
+.doodle-route { width: 4.2rem; height: 1.6rem; }
+
+/* linajková kartička */
+.paper-index {
+  padding: 0.9rem 1.3rem 1.2rem;
+  background-image:
+    var(--paper-grain),
+    linear-gradient(180deg, transparent 2.75rem, rgba(82, 109, 75, 0.6) 2.75rem, rgba(82, 109, 75, 0.6) calc(2.75rem + 1px), transparent calc(2.75rem + 1px)),
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(1.75rem - 1px), rgba(82, 109, 75, 0.18) calc(1.75rem - 1px), rgba(82, 109, 75, 0.18) 1.75rem);
+  background-position: 0 0, 0 0, 0 2.75rem;
+}
+
+.checklist {
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 1.7rem;
+}
+
+.checklist li::before {
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+  width: 0.95rem;
+  height: 0.95rem;
+  content: "";
+  border: 1.5px solid var(--ink);
+  border-radius: 2px 3px 2px 4px;
+  transform: rotate(-4deg);
+}
+
+.checklist li::after {
+  position: absolute;
+  top: 0.1rem;
+  left: 0.15rem;
+  color: var(--ink-pink);
+  content: "✓";
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+/* kancelárska sponka – drôt cez SVG masku, farba cez --clip-color */
+.board-clip {
+  --clip-color: #d93a3a;
+  position: absolute;
+  top: -1.45rem;
+  left: 1.6rem;
+  z-index: 5;
+  width: 1.05rem;
+  height: 2.8rem;
+  filter:
+    drop-shadow(0.06rem 0.1rem 0.05rem rgba(30, 20, 15, 0.35))
+    drop-shadow(0.15rem 0.3rem 0.3rem rgba(30, 20, 15, 0.18));
+  transform: rotate(6deg);
+  pointer-events: none;
+}
+
+.board-clip::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.18), rgba(255, 255, 255, 0.35) 30%, rgba(255, 255, 255, 0) 55%, rgba(0, 0, 0, 0.12)),
+    var(--clip-color);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 64'%3E%3Cpath d='M8 18V48a4 4 0 0 0 8 0V10a6 6 0 0 0-12 0V52a8 8 0 0 0 16 0V18' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 64'%3E%3Cpath d='M8 18V48a4 4 0 0 0 8 0V10a6 6 0 0 0-12 0V52a8 8 0 0 0 16 0V18' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.board-clip-red { --clip-color: #d93a3a; }
+.board-clip-pink { --clip-color: #f06aa8; }
+.board-clip-yellow { --clip-color: #f2cf1d; }
+.board-clip-blue { --clip-color: #3a86e0; }
+.board-clip-white { --clip-color: #f4f3ef; }
+.board-clip-green { --clip-color: #1f9a4a; }
+
+@keyframes rebuilt-note-in {
+  0% { opacity: 0; transform: translateY(-1.5rem) rotate(0deg) scale(1.04); }
+  60% { opacity: 1; transform: translateY(0.15rem) rotate(calc(var(--note-rotation, 0deg) * 1.6)) scale(1); }
+  80% { transform: translateY(0) rotate(calc(var(--note-rotation, 0deg) * 0.8)); }
+  100% { opacity: 1; transform: translateY(0) rotate(var(--note-rotation, 0deg)) scale(1); }
+}
+
+@media (max-width: 1100px) {
+  .collage {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* zošit a útržok SK → CPH vedľa seba na celú šírku */
+  .collage-col-a { grid-column: 1 / -1; flex-direction: row; align-items: flex-start; gap: 2.5rem; }
+  .bi-notebook { flex: 1; }
+  .bi-route { flex: none; align-self: flex-start; margin: 2.5rem 1rem 0 0; }
+  .collage-col-b,
+  .collage-col-c { padding-top: 0; }
+}
+
+@media (max-width: 767px) {
+  .about-rebuilt-board {
+    width: 100%;
+    margin: 0;
+    padding: 2.25rem 1rem 2.5rem;
+  }
+
+  .collage {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: 26rem;
+    margin: 0 auto;
+  }
+
+  .collage-col-a { flex-direction: column; }
+  .bi-notebook { flex: none; }
+  .bi-route { align-self: flex-end; margin: 2.2rem 1rem 0 0; }
+  .doodle-circled { white-space: normal; }
+}
+
+/* MULTIMEDIA – polaroidy na šnúrach */
+.multimedia-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem clamp(2rem, 3vw, 3.5rem);
+  align-items: start;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.polaroid {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+}
+
+.polaroid-paper {
+  padding: 0.75rem 0.75rem 0;
+}
+
+.polaroid-photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: #eceae6;
+}
+
+.polaroid-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms ease;
+}
+
+.polaroid:hover .polaroid-photo img {
+  transform: scale(1.04);
+}
+
+.polaroid-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding-left: 0.2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  color: #c45163;
+  font: 400 1.1rem/1 Inter, sans-serif;
+  transform: translate(-50%, -50%);
+}
+
+.polaroid-caption {
+  display: block;
+  padding: 0.75rem 0.4rem 0.1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.polaroid-hint {
+  display: block;
+  padding-bottom: 0.95rem;
+  color: #526d4b;
+  font: 400 0.6rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* CONTACT – "hľadám prácu", poznámka a vizitky */
+.contact-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 3.5rem;
+  align-items: start;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.bi-hiring {
+  justify-self: end;
+  width: min(100%, 24rem);
+  margin-top: 1.5rem;
+}
+
+.contact-note {
+  justify-self: start;
+  width: min(100%, 20rem);
+}
+
+.contact-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.8rem 3rem;
+  grid-column: 1 / -1;
+  margin-top: 1.5rem;
+}
+
+.contact-card {
+  display: block;
+  width: 16rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-card-paper {
+  padding: 1.5rem 1.3rem 1.1rem;
+  border-top: 0.3rem solid #526d4b;
+}
+
+.contact-card-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #526d4b;
+  font: 400 0.66rem/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.contact-card-value {
+  font-size: 1.45rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  transition: color 200ms ease;
+}
+
+.contact-card:hover .contact-card-value {
+  color: var(--ink-pink);
+}
+
+/* MULTIMEDIA – šnúra so svetielkami na tmavej stene, fotky na drevených štipcoch */
+.multimedia-board {
+  --line-gap: clamp(2rem, 3vw, 3.5rem);
+  column-gap: var(--line-gap);
+}
+
+.line-slot {
+  position: relative;
+  padding-top: 1.2rem;
+}
+
+.line-slot::before {
+  position: absolute;
+  top: 0.55rem;
+  right: calc(var(--line-gap) / -2 - 1px);
+  left: calc(var(--line-gap) / -2 - 1px);
+  height: 2px;
+  content: "";
+  background: repeating-linear-gradient(90deg, #d8c4a2 0 5px, #b9a47f 5px 7px);
+  box-shadow: 0 0.35rem 0.35rem rgba(0, 0, 0, 0.45);
+}
+
+/* svetielka na šnúre */
+.line-slot::after {
+  position: absolute;
+  top: 0.15rem;
+  right: calc(var(--line-gap) / -2);
+  left: calc(var(--line-gap) / -2);
+  height: 0.9rem;
+  content: "";
+  background: radial-gradient(circle at 50% 70%, #fff6d8 0 0.16rem, rgba(255, 214, 140, 0.85) 0.24rem, rgba(255, 200, 120, 0.25) 0.42rem, transparent 0.62rem) 1.1rem 0 / 3.4rem 100% repeat-x;
+  pointer-events: none;
+  animation: fairy-glow 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes fairy-glow {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
+}
+
+.line-slot .polaroid.bi {
+  transform-origin: 50% 0;
+}
+
+.multimedia-board .polaroid-paper {
+  box-shadow: 0 0 2.4rem rgba(255, 214, 150, 0.1);
+}
+
+.clothespin {
+  position: absolute;
+  top: -1.55rem;
+  left: 50%;
+  z-index: 5;
+  width: 0.8rem;
+  height: 2.6rem;
+  border-radius: 0.2rem 0.2rem 0.3rem 0.3rem;
+  background:
+    linear-gradient(90deg, transparent 46%, rgba(70, 40, 15, 0.45) 46% 54%, transparent 54%),
+    linear-gradient(180deg, transparent 38%, #9aa0a3 38% 50%, transparent 50%),
+    linear-gradient(90deg, #b88a55, #e1bd8c 40%, #c59a64);
+  box-shadow: 0.15rem 0.35rem 0.35rem rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* ---------- IZBA: celá stránka je stena, scroll hýbe kamerou (Home.vue) ---------- */
+.office-page {
+  position: relative;
+}
+
+.office-viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+}
+
+.office-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* nekonečné animácie (lávová lampa, svetielka, visačka, filmový pás) bežia len pri veci, pri ktorej si –
+   inak by sa izba prekresľovala aj kvôli veciam mimo obrazovky */
+.office-spot:not(.is-current) *,
+.office-spot:not(.is-current) *::before,
+.office-spot:not(.is-current) *::after {
+  animation-play-state: paused !important;
+}
+
+/* počas presunu sa nedá omylom kliknúť na veci popri ceste – len na tú, ku ktorej kamera ide */
+.office-world.is-moving .office-spot:not(.is-current) {
+  pointer-events: none;
+}
+
+/* nápoveda nad mapkou dole: malý lístok, čo sa pri veci dá robiť (s odstupom od mapky) */
+.room-hint {
+  position: fixed;
+  bottom: 8.6rem;
+  left: 50%;
+  z-index: 49;
+  margin: 0;
+  padding: 0.45rem 1.1rem 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(253, 251, 247, 0.9);
+  box-shadow: 0 8px 20px -10px rgba(45, 35, 25, 0.4);
+  color: var(--ink);
+  font: 700 1.35rem/1.1 var(--font-hand);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%) rotate(-1deg);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.room-hint::before {
+  margin-right: 0.45rem;
+  color: var(--ink-pink);
+  content: "✎";
+}
+
+.room-hint.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.5rem) rotate(-1deg);
+}
+
+.room-hint span {
+  display: inline-block;
+  animation: hint-in 450ms ease both;
+}
+
+@keyframes hint-in {
+  from { opacity: 0; transform: translateY(0.3rem); }
+}
+
+@media (max-width: 600px) {
+  .room-hint {
+    bottom: 6.4rem;
+    max-width: calc(100vw - 2rem);
+    font-size: 1.15rem;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+.office-spot {
+  position: absolute;
+  width: max-content;
+}
+
+/* MULTIMEDIA – stena s fotkami má pevnú šírku vo svete izby (dva rady po troch, kamera ukáže celú naraz) */
+.photo-wall {
+  width: 1150px;
+  padding: 0.5rem 0 0.5rem;
+}
+
+/* kúsok washi pásky, ktorým sú lístočky nalepené na zrkadle a dverách */
+.tape {
+  --tape: rgba(236, 226, 196, 0.85);
+  position: absolute;
+  top: -0.9rem;
+  left: 50%;
+  z-index: 5;
+  width: 6.5rem;
+  height: 1.7rem;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0 4px, transparent 4px 9px),
+    var(--tape);
+  clip-path: polygon(3% 0, 97% 4%, 100% 30%, 96% 55%, 100% 80%, 97% 100%, 2% 96%, 0 70%, 4% 45%, 0 20%);
+  transform: translateX(-50%) rotate(-3deg);
+  pointer-events: none;
+}
+
+.tape-pink { --tape: rgba(242, 177, 184, 0.85); }
+.tape-green { --tape: rgba(190, 210, 175, 0.85); }
+
+/* strop a dubová podlaha – pásy cez celé okno, Home ich posúva podľa kamery */
+.room-ceiling,
+.room-floor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  will-change: transform;
+}
+
+.room-ceiling {
+  background: #fbfaf8;
+  box-shadow: inset 0 -3px 0 #ebe8e2;
+}
+
+/* dubové dosky s posunutými spojmi – posúvajú sa a zväčšujú spolu s kamerou.
+   Vzor je vlastná vrstva, ktorú Home len posúva a zväčšuje transformáciou (bez prekresľovania). */
+.room-floor {
+  background-color: #c79461;
+}
+
+.room-floor-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.room-floor-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14000px;
+  height: 6000px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='360'%3E%3Crect width='800' height='180' fill='%23c99662'/%3E%3Crect x='800' width='800' height='180' fill='%23c59260'/%3E%3Crect y='180' width='400' height='180' fill='%23c99561'/%3E%3Crect x='400' y='180' width='800' height='180' fill='%23cc9965'/%3E%3Crect x='1200' y='180' width='400' height='180' fill='%23c99561'/%3E%3Cg stroke='%23885530' stroke-opacity='.2' stroke-width='3'%3E%3Cpath d='M0 2H1600M0 182H1600M2 0V180M802 0V180M402 180V360M1202 180V360'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 1600px 360px;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* tieň pri stene */
+.room-floor-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(40, 25, 10, 0.22), rgba(40, 25, 10, 0) 30%);
+}
+
+/* lišta pri podlahe – výška sa mení so zoomom kamery (transformácia, bez prekresľovania) */
+.room-baseboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  margin-top: -110px;
+  background: linear-gradient(180deg, #ffffff 0 14px, #f1efeb 14px, #e6e3dd);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+/* prítmie a teplé svetlo lávovej lampy pri multimédiách */
+.room-dim,
+.room-lamp-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* šero v izbe: stred obrazovky (vec, na ktorú sa pozeráš) ostane svetlejší, okraje tmavnú */
+.room-dim {
+  /* diery pre svietiace veci sa skladajú cez masku (Home.vue) */
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  background: radial-gradient(ellipse 72% 68% at 50% 46%, rgba(20, 16, 32, 0.08) 0%, rgba(20, 16, 32, 0.12) 30%, rgba(20, 16, 32, 0.55) 70%, rgba(14, 10, 24, 0.88) 100%);
+}
+
+.room-lamp-light {
+  mix-blend-mode: screen;
+}
+
+.office-scroll {
+  width: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .bi {
+    opacity: 1;
+  }
+
+  .hero-filmstrip {
+    animation: none;
+  }
+
+  .about-text-block:hover {
+    transform: none;
+  }
+
+  .about-design-board {
+    transform: none;
+  }
 }

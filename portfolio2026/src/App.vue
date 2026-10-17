@@ -1,43 +1,42 @@
-
 <template>
-  <div class="bg-[#fcfaf6] text-black min-h-screen">
+  <div class="bg-[#f7f3ee] text-black min-h-screen">
     <div class="cursor"></div>
-    <Navbar />
     <router-view />
   </div>
 </template>
 
-
-
 <script>
 export default {
+  data() {
+    return {
+      cursor: null
+    };
+  },
+
   mounted() {
-    const cursor = document.querySelector(".cursor");
+    this.cursor = document.querySelector(".cursor");
 
-    // Sleduj pohyb myši
-    window.addEventListener("mousemove", (e) => {
-      cursor.style.left = e.clientX + "px";
-      cursor.style.top = e.clientY + "px";
-    });
+    window.addEventListener("mousemove", this.handleMouseMove);
+    document.addEventListener("mouseover", this.handleMouseOver);
+  },
 
-    // Dynamické hover over elementy
-    document.addEventListener("mouseover", (e) => {
-      const el = e.target;
-      if (
-        el.matches("a, button, .project-card") // pridaj všetky interaktívne triedy
-      ) {
-        cursor.classList.add("hover");
-      }
-    });
+  beforeUnmount() {
+    window.removeEventListener("mousemove", this.handleMouseMove);
+    document.removeEventListener("mouseover", this.handleMouseOver);
+  },
 
-    document.addEventListener("mouseout", (e) => {
-      const el = e.target;
-      if (
-        el.matches("a, button, .project-card")
-      ) {
-        cursor.classList.remove("hover");
-      }
-    });
+  methods: {
+    handleMouseMove(e) {
+      if (!this.cursor) return;
+      this.cursor.style.left = `${e.clientX}px`;
+      this.cursor.style.top = `${e.clientY}px`;
+    },
+
+    handleMouseOver(e) {
+      if (!this.cursor || !(e.target instanceof Element)) return;
+      const element = e.target.closest("a, button, .project-card, [class*='cursor-pointer']");
+      this.cursor.classList.toggle("hover", Boolean(element));
+    }
   }
 };
 </script>
