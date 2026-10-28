@@ -20,6 +20,15 @@ const spotOf = (stop) => SPOT_OF[stop] || stop;
 // zastávky, ktoré sa zmestia celé na obrazovku – kamera pri nich nejde dole, scroll hneď pokračuje ďalej
 const FIT = new Set(["hero", "about", "skills", "projects", "multimedia", "contact"]);
 
+// úvod a zošit sú na tej istej posteli – medzi nimi sa kamera oddiali len trochu.
+// Pri veľkom oddialení by prehliadač musel naraz vykresliť skoro celú izbu a presun by sekal.
+const NEAR_ZOOM = 0.35;
+const nearFar = (a, b, scaleA, scaleB, far) => {
+  const pair = [spotOf(a), spotOf(b)];
+  if (!pair.includes("hero") || !pair.includes("about")) return far;
+  return Math.max(far, Math.min(scaleA, scaleB) * NEAR_ZOOM);
+};
+
 // krátka nápoveda nad mapkou: čo sa pri veci dá robiť (na dotykových zariadeniach "tap")
 const touch = window.matchMedia("(pointer: coarse)").matches;
 const HINTS = {
@@ -85,9 +94,25 @@ let resizeObserver;
 let currentSpot = null;
 // animácia presunu pri kliku na šípku / v menu
 let tween = 0;
+// naposledy vykreslený záber kamery (aj počas letu, keď scroll ešte stojí na pôvodnej veci)
+let lastCam = null;
 const styleCache = new WeakMap();
 const scrollStorageKey = "portfolio-scroll-position";
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// šero a svetlo sú mäkké prechody – plátnam stačí polovičné rozlíšenie
+const LIGHT_RES = 0.5;
+let vignette = null;
+let holeFill = null;
+
+// elipsa s gradientom v jednotkovom kruhu (stred 0, polomer 1), natiahnutá na rx × ry; vyplní celé plátno
+const fillEllipse = (ctx, cx, cy, rx, ry, fill) => {
+  // nepatrná "diera" by nič neurobila (mimo elipsy je maska nepriehľadná)
+  if (rx * LIGHT_RES < 0.01 || ry * LIGHT_RES < 0.01) return;
+  ctx.setTransform(rx * LIGHT_RES, 0, 0, ry * LIGHT_RES, cx * LIGHT_RES, cy * LIGHT_RES);
+  ctx.fillStyle = fill;
+  ctx.fillRect(-cx / rx, -cy / ry, view.w / rx, view.h / ry);
+};
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -129,6 +154,25 @@ const measure = () => {
     bottom: H - (mobile ? 160 : 195)
   };
   view = { w: W, h: H };
+
+  const lightW = Math.ceil(W * LIGHT_RES);
+  const lightH = Math.ceil(H * LIGHT_RES);
+  [dimLayer.value, lampLight.value].forEach((canvas) => {
+    if (canvas.width !== lightW) canvas.width = lightW;
+    if (canvas.height !== lightH) canvas.height = lightH;
+  });
+  if (!vignette) {
+    const ctx = dimLayer.value.getContext("2d");
+    vignette = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    vignette.addColorStop(0, "rgba(20, 16, 32, 0.08)");
+    vignette.addColorStop(0.3, "rgba(20, 16, 32, 0.12)");
+    vignette.addColorStop(0.7, "rgba(20, 16, 32, 0.55)");
+    vignette.addColorStop(1, "rgba(14, 10, 24, 0.88)");
+    holeFill = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    holeFill.addColorStop(0, "rgba(0, 0, 0, 0)");
+    holeFill.addColorStop(0.55, "rgba(0, 0, 0, 0)");
+    holeFill.addColorStop(1, "#000");
+  }
 
   const size = (id) => ({ w: spotEls[id].offsetWidth, h: spotEls[id].offsetHeight });
   const spots = {};
@@ -245,7 +289,9 @@ const measure = () => {
     Object.assign(seg, {
       ax: from.cx, ay: from.cyEnd, as: from.scale,
       bx: to.cx, by: to.cyStart, bs: to.scale,
-      far: seg.turn || reduceMotion.matches ? Math.min(from.scale, to.scale) : Math.min(far, from.scale * 0.85, to.scale * 0.85)
+      far: seg.turn || reduceMotion.matches
+        ? Math.min(from.scale, to.scale)
+        : nearFar(STOPS[seg.index], STOPS[seg.index + 1], from.scale, to.scale, Math.min(far, from.scale * 0.85, to.scale * 0.85))
     });
   });
 
@@ -314,6 +360,7 @@ const render = (scroll, override = null) => {
 
   const { w: W, h: H } = view;
   const cam = override || cameraAt(scroll);
+  lastCam = cam;
   const toScreenX = (x) => W / 2 + (x - cam.cx) * cam.scale;
   const toScreenY = (y) => H / 2 + (y - cam.cy) * cam.scale;
 
@@ -337,26 +384,44 @@ const render = (scroll, override = null) => {
   // priehľadné vrstvy úplne vypnúť – inak ich prehliadač skladá každý snímok
   setStyle(dimLayer.value, "visibility", dim > 0.001 ? "visible" : "hidden");
 
-  // svietiace veci (lávová lampa, monitor) majú v šere "dieru", aby žiarili naplno
+  // šero aj svetlo sa kreslia do malého plátna – CSS maska a gradienty cez celé okno by prehliadač
+  // pri každom pohybe kamery prekresľoval po dlaždiciach a presun do tmavých častí izby by sekal
   if (dim > 0.001 && lamp) {
-    const hole = (x, y, rx, ry) =>
-      `radial-gradient(ellipse ${rx * cam.scale}px ${ry * cam.scale}px at ${toScreenX(x)}px ${toScreenY(y)}px, transparent 55%, #000 100%)`;
-    const holes = [hole(lamp.x, lamp.y, 150 * Math.max(lava, 0.001), 280 * Math.max(lava, 0.001))];
-    if (screen > 0.001) screens.forEach((sc) => holes.push(hole(sc.x, sc.y, sc.w * 0.78, sc.h * 0.85)));
-    const mask = holes.join(", ");
-    setStyle(dimLayer.value, "webkitMaskImage", mask);
-    setStyle(dimLayer.value, "maskImage", mask);
+    const ctx = dimLayer.value.getContext("2d");
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.clearRect(0, 0, dimLayer.value.width, dimLayer.value.height);
+    // vinetácia: elipsa 72 % × 68 % okna so stredom trochu nad stredom obrazovky
+    fillEllipse(ctx, W / 2, H * 0.46, W * 0.72, H * 0.68, vignette);
+
+    // svietiace veci (lávová lampa, monitor) majú v šere "dieru", aby žiarili naplno
+    ctx.globalCompositeOperation = "destination-in";
+    const hole = (x, y, rx, ry) => fillEllipse(ctx, toScreenX(x), toScreenY(y), rx * cam.scale, ry * cam.scale, holeFill);
+    hole(lamp.x, lamp.y, 150 * Math.max(lava, 0.001), 280 * Math.max(lava, 0.001));
+    if (screen > 0.001) screens.forEach((sc) => hole(sc.x, sc.y, sc.w * 0.78, sc.h * 0.85));
   }
   if ((lava > 0.001 || screen > 0.001) && lamp) {
-    const r = 1500 * cam.scale;
-    const glows = [
-      `radial-gradient(circle at ${toScreenX(lamp.x)}px ${toScreenY(lamp.y)}px, rgba(255, 150, 70, ${0.5 * lava}) 0, rgba(255, 90, 60, ${0.3 * lava}) ${r * 0.3}px, rgba(255, 70, 90, ${0.12 * lava}) ${r * 0.7}px, rgba(255, 70, 90, 0) ${r}px)`,
-      ...screens.map((sc) => {
-        const sr = sc.r * cam.scale;
-        return `radial-gradient(circle at ${toScreenX(sc.x)}px ${toScreenY(sc.y)}px, rgba(150, 190, 255, ${0.22 * screen}) 0, rgba(150, 190, 255, ${0.08 * screen}) ${sr * 0.6}px, rgba(150, 190, 255, 0) ${sr}px)`;
-      })
-    ];
-    setStyle(lampLight.value, "background", glows.join(", "));
+    const ctx = lampLight.value.getContext("2d");
+    ctx.setTransform(LIGHT_RES, 0, 0, LIGHT_RES, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const glow = (x, y, r, stops) => {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      stops.forEach(([at, color]) => g.addColorStop(at, color));
+      ctx.fillStyle = g;
+      ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    };
+    // monitor pod lávovou lampou (v CSS bol prvý gradient navrchu)
+    screens.forEach((sc) => glow(toScreenX(sc.x), toScreenY(sc.y), sc.r * cam.scale, [
+      [0, `rgba(150, 190, 255, ${0.22 * screen})`],
+      [0.6, `rgba(150, 190, 255, ${0.08 * screen})`],
+      [1, "rgba(150, 190, 255, 0)"]
+    ]));
+    glow(toScreenX(lamp.x), toScreenY(lamp.y), 1500 * cam.scale, [
+      [0, `rgba(255, 150, 70, ${0.5 * lava})`],
+      [0.3, `rgba(255, 90, 60, ${0.3 * lava})`],
+      [0.7, `rgba(255, 70, 90, ${0.12 * lava})`],
+      [1, "rgba(255, 70, 90, 0)"]
+    ]);
     setStyle(lampLight.value, "opacity", "1");
     setStyle(lampLight.value, "visibility", "visible");
   } else {
@@ -442,9 +507,13 @@ const setFlying = (on) => {
   window[method]("touchmove", blockWhileFlying, { passive: false });
 };
 
+// kam letí kamera po kliku v menu (pozícia scrollu cieľovej veci)
+let flightTarget = null;
+
 const cancelFlight = () => {
   cancelAnimationFrame(tween);
   tween = 0;
+  flightTarget = null;
   setFlying(false);
 };
 
@@ -452,14 +521,19 @@ const flyTo = (index) => {
   const target = stays()[Math.max(0, Math.min(STOPS.length - 1, index))];
   if (!target) return;
   const toY = target.start;
+  // opakovaný klik na tú istú vec počas letu let nereštartuje
+  if (tween && toY === flightTarget) return;
+  // nový klik počas letu: let pokračuje odtiaľ, kde kamera práve je – scroll (cameraScroll) je ešte
+  // na pôvodnej veci, takže z neho by kamera najprv skočila späť
+  const midFlight = !!tween && !!lastCam;
+  const A = midFlight ? lastCam : cameraAt(cameraScroll);
   cancelFlight();
   cancelAnimationFrame(frame);
   frame = 0;
 
   const fromY = cameraScroll;
-  const A = cameraAt(fromY);
   const B = cameraAt(toY);
-  if (reduceMotion.matches || Math.abs(toY - fromY) < 1) {
+  if (reduceMotion.matches || (!midFlight && Math.abs(toY - fromY) < 1)) {
     scrollTop(toY);
     targetScroll = cameraScroll = toY;
     cameraVelocity = 0;
@@ -472,13 +546,17 @@ const flyTo = (index) => {
   const sameSpot = spotOf(STOPS[A.index]) === spotOf(STOPS[B.index]);
   const dx = Math.abs(A.cx - B.cx);
   const dy = Math.abs(A.cy - B.cy);
+  // uprostred letu je kamera už oddialená – ďalej sa oddiali len ak treba, nie znova o 15 %
+  const fromScale = midFlight ? Infinity : A.scale * 0.85;
   const far = sameSpot
     ? Math.min(A.scale, B.scale)
-    : Math.min(0.7, A.scale * 0.85, B.scale * 0.85, view.w / (dx + 1800), view.h / (dy + 1600));
+    : Math.min(midFlight ? A.scale : Infinity, nearFar(STOPS[A.index], STOPS[B.index], A.scale, B.scale,
+      Math.min(0.7, fromScale, B.scale * 0.85, view.w / (dx + 1800), view.h / (dy + 1600))));
   const duration = sameSpot ? 1400 : Math.min(3400, 2300 + dx * 0.12);
 
   const t0 = performance.now();
   setFlying(true);
+  flightTarget = toY;
   const frameStep = (now) => {
     const t = Math.min(1, (now - t0) / duration);
     // rovnaké tri fázy ako pri scrolle: oddiali sa → preletí → priblíži sa
@@ -732,8 +810,8 @@ onUnmounted(() => {
       </div>
 
       <!-- prítmie a svetlo lávovej lampy a monitora -->
-      <div ref="dimLayer" class="room-dim" aria-hidden="true"></div>
-      <div ref="lampLight" class="room-lamp-light" aria-hidden="true"></div>
+      <canvas ref="dimLayer" class="room-dim" aria-hidden="true"></canvas>
+      <canvas ref="lampLight" class="room-lamp-light" aria-hidden="true"></canvas>
     </div>
 
     <!-- mapka izby namiesto menu -->

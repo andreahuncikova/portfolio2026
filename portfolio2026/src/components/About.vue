@@ -121,6 +121,15 @@ const logos = {
     lines: "M30 26 C 22 26, 27 38, 20 40 C 27 42, 22 54, 30 54 M50 26 C 58 26, 53 38, 60 40 C 53 42, 58 54, 50 54 M37 40 L43 40",
     lineColor: "#34323a"
   },
+  Express: { shapes: [[tile, "#4a4752"]], t: [["ex", 40, 50, "#fffdf6", 28]] },
+  // blesk v kruhu
+  "Socket.io": {
+    shapes: [
+      [circle(40, 40, 30), "#34323a"],
+      ["M45 15 L27 44 L39 44 L35 65 L54 35 L42 35 Z", "#fffdf6"]
+    ]
+  },
+  WordPress: { shapes: [[circle(40, 40, 30), "#2d7fae"]], t: [["W", 40, 52, "#fffdf6", 34]] },
   MySQL: {
     shapes: [["M14 18 C 14 8, 66 8, 66 18 L66 62 C 66 72, 14 72, 14 62 Z", "#4d86ad"]],
     lines: "M14 18 C 14 28, 66 28, 66 18",
@@ -151,6 +160,20 @@ const logos = {
     shapes: [[circle(40, 40, 30), "#2f86f0"]],
     lines: "M33 26 L55 40 L33 54 Z",
     lineColor: "#fffdf6"
+  },
+  // veľryba s kontajnermi na chrbte
+  Docker: {
+    shapes: [
+      ["M8 44 L66 44 C 68 40, 72 38, 76 39 C 74 44, 70 46, 68 47 C 64 62, 50 70, 34 70 C 18 70, 9 60, 8 44 Z", "#2496ed"],
+      ["M16 34 h9 v10 h-9 Z", "#8fd0ff"],
+      ["M25 34 h9 v10 h-9 Z", "#8fd0ff"],
+      ["M34 34 h9 v10 h-9 Z", "#8fd0ff"],
+      ["M25 24 h9 v10 h-9 Z", "#8fd0ff"],
+      ["M34 24 h9 v10 h-9 Z", "#8fd0ff"],
+      ["M43 34 h9 v10 h-9 Z", "#8fd0ff"]
+    ],
+    lines: "M22 54 L23 54 M18 62 C 26 64, 36 63, 44 58",
+    lineColor: "#fffdf6"
   }
 };
 
@@ -174,11 +197,10 @@ const focus = [
   { icon: "palette", label: "visual design" }
 ];
 
-// zoznam pod sebou: súčasná práca, štúdium, kedy môžem nastúpiť, kde som a čo ma formovalo
+// zoznam pod sebou: súčasná práca, štúdium, kde som a čo ma formovalo
 const rightNow = [
   { icon: "briefcase", label: "UI frontend developer student assistant at Everllence" },
-  { icon: "cap", label: "finishing my Web Dev bachelor's" },
-  { icon: "calendar", label: "open to full-time roles from February 2027" },
+  { icon: "cap", label: "finishing my Web Dev bachelor's in January 2027" },
   { icon: "pin", label: "based in Copenhagen" },
   { icon: "camera", label: "Multimedia Design background" }
 ];
@@ -186,13 +208,14 @@ const rightNow = [
 const skills = {
   frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Vue", "Tailwind"],
   design: ["Figma", "Photoshop", "Illustrator", "InDesign", "Premiere Pro", "After Effects"],
-  backend: ["PHP", "Node.js", "REST API"],
+  backend: ["PHP", "Node.js", "Express", "REST API", "Socket.io", "WordPress"],
   databases: ["MySQL", "Firebase", "MongoDB"],
-  quality: ["Playwright", "GitHub Actions CI/CD"]
+  quality: ["Playwright", "GitHub Actions CI/CD", "Docker"]
 };
 
 // Home posúva otáčanie strany priamo každý snímok (0 = about, 1 = skills)
 const root = ref(null);
+const leaf = ref(null);
 // zapíše sa len pri zmene – inak by sa štýly celého zošita prepočítavali každý snímok
 let lastFlip = -1;
 // triedy cez Vue – keby sa pridávali ručne, Vue by ich zmazal pri zmene :class (napr. is-reading)
@@ -200,11 +223,13 @@ const turning = ref(false);
 const flipped = ref(false);
 const setPage = (progress) => {
   const flip = Math.round(progress * 1000) / 1000;
-  if (flip === lastFlip || !root.value) return;
+  if (flip === lastFlip || !leaf.value) return;
   lastFlip = flip;
-  root.value.style.setProperty("--flip", flip);
   // 3D priestor treba len počas otáčania; inak je zošit plochý (oveľa lacnejšie vykresľovanie)
   turning.value = flip > 0 && flip < 1;
+  // otáča sa priamo list – CSS premenná na celom zošite by ju dedili všetky prvky v ňom
+  // a prehliadač by každý snímok prepočítal štýly celého zošita
+  leaf.value.style.transform = turning.value ? `rotateY(${flip * -180}deg)` : "";
   flipped.value = flip >= 0.5;
 };
 
@@ -228,7 +253,7 @@ defineExpose({ setPage });
       </figure>
 
       <p class="nb-line nb-narrow">Hello! I'm Andrea</p>
-      <p class="nb-line nb-narrow">I like turning ideas</p>
+      <p class="nb-line nb-narrow">I turn ideas</p>
       <p class="nb-line nb-narrow">into <mark>useful web</mark></p>
       <p class="nb-line nb-narrow"><mark>experiences</mark> ♡</p>
 
@@ -296,7 +321,7 @@ defineExpose({ setPage });
 
     <!-- pravá strana pod listom: skills (backend, databázy) -->
     <div class="notebook-page notebook-page-right">
-      <h3 class="nb-heading nb-icon-heading"><Doodle name="server" />backend</h3>
+      <h3 class="nb-heading nb-icon-heading"><Doodle name="server" />backend &amp; CMS</h3>
       <ul class="nb-skills">
         <li v-for="item in skills.backend" :key="item" class="nb-skill"><SkillLogo :name="item" /><span>{{ item }}</span></li>
       </ul>
@@ -313,7 +338,7 @@ defineExpose({ setPage });
     </div>
 
     <!-- otáčaný list: predná strana = my focus, zadná strana = skills (frontend, design) -->
-    <div class="notebook-leaf" @click="reading && emit('turn')">
+    <div ref="leaf" class="notebook-leaf" @click="reading && emit('turn')">
       <div class="notebook-page leaf-face leaf-front">
         <h3 class="nb-heading">my focus</h3>
         <ul class="nb-focus">
@@ -362,7 +387,6 @@ defineExpose({ setPage });
 /* zošit sa kreslí vo veľkom (1720 × 1078) a do izby sa zmenší,
    aby bol primeraný k posteli (≈ 720 × 450 px sveta, posteľ má 3330) */
 .notebook-spot {
-  --flip: 0;
   --nb-scale: 0.42;
   position: relative;
   width: calc(1720px * var(--nb-scale));
@@ -460,7 +484,6 @@ defineExpose({ setPage });
   right: 0;
   bottom: 0;
   width: calc((100% - 64px) / 2);
-  transform: rotateY(calc(var(--flip) * -180deg));
   transform-origin: calc(-32px) 50%;
   transform-style: preserve-3d;
 }

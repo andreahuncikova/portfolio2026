@@ -533,9 +533,12 @@ const items = computed(() => {
   border-radius: 90px 34px 28px 50px / 70px 30px 24px 40px;
   background:
     linear-gradient(180deg, #8d8f97 0 60px, transparent 60px),
-    radial-gradient(ellipse 18% 70% at 22% 100%, rgba(0, 0, 0, 0.12), transparent 70%),
-    radial-gradient(ellipse 14% 70% at 48% 100%, rgba(0, 0, 0, 0.1), transparent 70%),
-    radial-gradient(ellipse 16% 70% at 70% 100%, rgba(0, 0, 0, 0.1), transparent 70%),
+    /* záhyby: každý gradient sa kreslí len vo svojom obdĺžniku (nie cez celú perinu) – rovnaký vzhľad,
+       ale posteľ sa pri pohybe kamery vykreslí asi o polovicu rýchlejšie.
+       Elipsa 18 % × 70 % so stredom 22 % / 100 % = obdĺžnik 36 % × 140 % na pozícii 6,25 % / -75 % */
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.12), transparent 70%) 6.25% -75% / 36% 140% no-repeat,
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.1), transparent 70%) 47.22% -75% / 28% 140% no-repeat,
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.1), transparent 70%) 79.41% -75% / 32% 140% no-repeat,
     linear-gradient(180deg, #73757d, #5c5e66);
   box-shadow: 0 14px 18px rgba(30, 25, 35, 0.2);
 }

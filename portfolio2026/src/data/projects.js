@@ -18,7 +18,7 @@ longDescription: "VisionFlow is a fullstack TypeScript application designed to h
     image: "/tripplanner.png",           // veľká fotka do detailu
     tech: ["Websockets-Socket.io", "Node.js", "MongoDB", "JavaScript", "Tailwind"],
     github: "https://github.com/andreahuncikova/tripplanner",
-    demo: "https://tripplanner-d1by.onrender.com/?code=21AD3A0D",
+    demo: "https://tripplanner-virid.vercel.app/login",
 longDescription: "TripPlanner is a real-time travel planning web app I built as a collaborative school project. It allows users to create and share trip itineraries with friends, making travel planning more interactive and social.<br><br>Users can register, create trips with multiple destinations, add activities to each day, and invite friends to collaborate on the itinerary. The app uses WebSockets (Socket.io) for real-time updates, so everyone sees changes instantly. We also implemented a chat feature for trip discussions."
   },
   {
